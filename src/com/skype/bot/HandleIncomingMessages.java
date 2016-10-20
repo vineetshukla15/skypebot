@@ -17,7 +17,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
+import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
+import com.skype.util.TempDBUtil;
 
 /**
  * Servlet implementation class HandleIncomingMessages
@@ -37,61 +40,82 @@ public class HandleIncomingMessages extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-	    
-	    String token = getAuthToken();
-	    String url = "https://apis.skype.com/v3/conversations/";
-	    StringBuffer jb = new StringBuffer();
-	    String line = null;
-	    try {
-	      BufferedReader reader = request.getReader();
-	      while ((line = reader.readLine()) != null)
-	        jb.append(line);
-	    } catch (Exception e) { /*report an error*/ }
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // TODO Auto-generated method stub
+      
+      String token = getAuthToken();
+      String url = "https://apis.skype.com/v3/conversations/";
+      StringBuffer jb = new StringBuffer();
+      String line = null;
+      String respMessage = null;
+      String from  = null;
+      try {
+        BufferedReader reader = request.getReader();
+        while ((line = reader.readLine()) != null)
+          jb.append(line);
+      } catch (Exception e) { /*report an error*/ }
+      System.out.println(jb.toString());
+      /*JSONArray jsonArray = (JSONArray) JSONValue.parse(jb.toString());
+    JSONObject jsonObject= (JSONObject) jsonArray.get(0);*/
 
-	    JSONArray jsonArray = (JSONArray) JSONValue.parse(jb.toString());
-        JSONObject jsonObject= (JSONObject) jsonArray.get(0);
-        url = url + jsonObject.get("from") + "/activities/";
+      JSONObject jsonObject= (JSONObject) JSONValue.parse(jb.toString());
+      JSONObject jsonObject1 = (JSONObject) jsonObject.get("from");
+      String idFrom = jsonObject1.get("id").toString();
+      url = url + idFrom + "/activities/";
 
-	    System.out.println(url);
-	    URL obj = new URL(url);
-        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-        con.setRequestMethod("POST");
-        con.setRequestProperty("Content-Type", "application/json");
-        con.setRequestProperty("Authorization", "Bearer "+token);
-        // For POST only - START
-        con.setDoOutput(true);
-      //Send request
-        JSONObject obj2 = new JSONObject();
-        obj2.put("type", "message"+"/"+"text");
-        obj2.put("text", "Got the message yahoo");
-        DataOutputStream wr = new DataOutputStream (
-                    con.getOutputStream ());
-        wr.writeBytes (obj2.toString());
-        wr.flush ();
-        wr.close ();
-        System.out.println(obj2.toString());
-        // For POST only - END
-        int responseCode = con.getResponseCode();
-        System.out.println("POST Response Code :: " + responseCode);
-        if (responseCode == HttpURLConnection.HTTP_OK) { //success
-            BufferedReader in = new BufferedReader(new InputStreamReader(
-                    con.getInputStream()));
-            String inputLine;
-            StringBuffer sb = new StringBuffer();
+      //IF user is landing first time
+      if(TempDBUtil.isThisFirstTime(idFrom)){
+    	  respMessage = "Hey <b>"+ jsonObject1.get("name")+ "</b> May i help you" ;
+    	  TempDBUtil.storeIdentities(idFrom, jsonObject1.get("name").toString());
+      }//If user has active session
+      else if(TempDBUtil.isActiveSession(idFrom)){
+    	  respMessage = "What a lovely day today!" ;    			  
+      }//User is returning
+      else{
+    	  respMessage = "Welcome back "+ jsonObject1.get("name");
+      }
+     
+	System.out.println("Complete Post URL is "+url);
 
-            while ((inputLine = in.readLine()) != null) {
-                sb.append(inputLine);
-            }
-            in.close();
+    URL obj = new URL(url);
+    HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+    con.setRequestMethod("POST");
+    con.setRequestProperty("Content-Type", "application/json");
+    con.setRequestProperty("Authorization", "Bearer "+token);
+    // For POST only - START
+    con.setDoOutput(true);
+  //Send request
+    JSONObject obj2 = new JSONObject();
+    obj2.put("type", "message"+"/"+"text");
+    obj2.put("text", respMessage);
+    
+    DataOutputStream wr = new DataOutputStream (
+                con.getOutputStream ());
+    wr.writeBytes (obj2.toString());
+    System.out.println(obj2.toString());
+    wr.flush ();
+    wr.close ();
+    // For POST only - END
+    int responseCode = con.getResponseCode();
+    System.out.println("POST Response Code :: " + responseCode);
+    if (responseCode == HttpURLConnection.HTTP_OK) { //success
+        BufferedReader in = new BufferedReader(new InputStreamReader(
+                con.getInputStream()));
+        String inputLine;
+        StringBuffer sb = new StringBuffer();
 
-            // print result
-            System.out.println(sb.toString());
-        } else {
-            System.out.println("POST request not worked");
+        while ((inputLine = in.readLine()) != null) {
+            sb.append(inputLine);
         }
-	}
+        in.close();
+
+        // print result
+        System.out.println(sb.toString());
+    } else {
+        System.out.println("POST request not worked");
+    }
+  }
+
 	
 	public String getAuthToken()
 	{
@@ -106,7 +130,7 @@ public class HandleIncomingMessages extends HttpServlet {
             DataOutputStream wr = new DataOutputStream (
                     conn.getOutputStream ());
             
-            wr.writeBytes ("client_id=63220841-561e-4fed-9a3d-5385bfbe3034&client_secret=igoksREW3AVBBaaCYrR41ij&grant_type=client_credentials&scope=https%3A%2F%2Fgraph.microsoft.com%2F.default");
+            wr.writeBytes ("client_id=8269e0eb-19c7-4994-8a1c-e88434ffd36e&client_secret=sc15m9AWzTmun6Ae7M7o4jL&grant_type=client_credentials&scope=https%3A%2F%2Fgraph.microsoft.com%2F.default");
             wr.flush ();
             wr.close ();
             
