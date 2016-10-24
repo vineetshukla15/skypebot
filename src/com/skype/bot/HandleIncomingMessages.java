@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -14,11 +13,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import com.skype.util.TempDBUtil;
 
@@ -43,7 +39,7 @@ public class HandleIncomingMessages extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
       
-      String token = getAuthToken();
+//      String token = getAuthToken();
       String url = "https://apis.skype.com/v3/conversations/";
       StringBuffer jb = new StringBuffer();
       String line = null;
@@ -54,7 +50,6 @@ public class HandleIncomingMessages extends HttpServlet {
         while ((line = reader.readLine()) != null)
           jb.append(line);
       } catch (Exception e) { /*report an error*/ }
-      System.out.println(jb.toString());
       /*JSONArray jsonArray = (JSONArray) JSONValue.parse(jb.toString());
     JSONObject jsonObject= (JSONObject) jsonArray.get(0);*/
 
@@ -76,12 +71,13 @@ public class HandleIncomingMessages extends HttpServlet {
       }
      
 	System.out.println("Complete Post URL is "+url);
-
+	
+	TempDBUtil.configToken();
     URL obj = new URL(url);
     HttpURLConnection con = (HttpURLConnection) obj.openConnection();
     con.setRequestMethod("POST");
     con.setRequestProperty("Content-Type", "application/json");
-    con.setRequestProperty("Authorization", "Bearer "+token);
+    con.setRequestProperty("Authorization", "Bearer "+/*getAuthToken()*/TempDBUtil.TOKENMAP.get("token"));
     // For POST only - START
     con.setDoOutput(true);
   //Send request
@@ -110,14 +106,12 @@ public class HandleIncomingMessages extends HttpServlet {
         in.close();
 
         // print result
-        System.out.println(sb.toString());
     } else {
         System.out.println("POST request not worked");
     }
   }
 
-	
-	public String getAuthToken()
+    private static String getAuthToken()
 	{
 	    String token = "";
 	    try{
@@ -143,20 +137,22 @@ public class HandleIncomingMessages extends HttpServlet {
                 (conn.getInputStream())));
             StringBuilder sb = new StringBuilder();
             String output;
-            System.out.println("Output from Server .... \n");
+            //System.out.println("Output from Server .... \n");
             while ((output = br.readLine()) != null) {
                 System.out.println(output);
                 sb.append(output);
             }
             JSONObject jsonObject = (JSONObject) JSONValue.parse(sb.toString());
             token = (String) jsonObject.get("access_token");
+            //expiry =(Long) jsonObject.get("expires_in");
             conn.disconnect();
         }
         catch(Exception e)
         {
             System.out.println(e.getMessage());
         }
+	    System.out.println("The received token is "+token);
         return token;
 	}
-
+	
 }
