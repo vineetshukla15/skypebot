@@ -9,10 +9,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
@@ -23,9 +25,11 @@ public class TempDBUtil {
 	private static Map<String, String> map = new WeakHashMap<String, String>();
 
 	public static Map<String, String> TOKENMAP = new WeakHashMap<String, String>();
+	
+	private static Map<String,JSONObject> conversationMap = new HashMap<String,JSONObject>();
 
-	public static void storeIdentities(String id, String timestamp) {
-		map.put(id, timestamp);
+	public static void storeIdentities(String id, String from) {
+		map.put(id, from);
 		nameList.add(id);
 	}
 
@@ -146,5 +150,26 @@ public class TempDBUtil {
 
 		return token;
 	}
+	
+	public static void storeConversation(String id,String text){
+			
+		JSONObject obj = new JSONObject();
+		obj.put("id", id);
+		obj.put("from", map.get("id"));
+		JSONArray list = new JSONArray();
+		list.add(map.get("id")+":"+text);
+		obj.put("messages", list);
+		conversationMap.put(id, obj);			
+	}
+	
+	public static void addTextToConversation(String id,String text,boolean isBot){
+		
+		String fromString = isBot?"Nancy":map.get("id");		
+		JSONObject convObj = conversationMap.get(id);
+		JSONArray list =(JSONArray)convObj.get("messages");
+		list.add(fromString+":"+text);
+		
+	}
+
 
 }
