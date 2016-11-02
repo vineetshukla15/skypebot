@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
-import java.nio.charset.Charset;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,11 +13,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.json.simple.JSONArray;
+import org.eclipse.jdt.internal.compiler.impl.CharConstant;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
-import com.skype.parser.DataParser;
+import com.skype.util.ChatConstants;
 import com.skype.util.TempDBUtil;
 
 /**
@@ -43,14 +41,10 @@ public class HandleIncomingMessages extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 
-		// String token = getAuthToken();
-		//String url ="https://skype.botframework.com/v3/conversations/";
-		String url = "https://apis.skype.com/v2/conversations/";
+		String url = "https://apis.skype.com/v3/conversations/";
 		StringBuffer jb = new StringBuffer();
 		String line = null;
-		String respMessage = null;
 
 		try {
 			BufferedReader reader = request.getReader();
@@ -62,37 +56,21 @@ public class HandleIncomingMessages extends HttpServlet {
 		 * JSONArray jsonArray = (JSONArray) JSONValue.parse(jb.toString());
 		 * JSONObject jsonObject= (JSONObject) jsonArray.get(0);
 		 */
-		
-		
+
 		JSONObject jsonObject = (JSONObject) JSONValue.parse(jb.toString());
 		JSONObject jsonObject1 = (JSONObject) jsonObject.get("from");
 		String id = jsonObject1.get("id").toString();
 		url = url + id + "/activities/";
-		
-		
-		System.out.println(jb.toString());
-		//String guestText = ((JSONObject)jsonObject.get("text")).toString();
-		
-		
+		String text = jsonObject.get("text").toString();
+		System.out.println(text);
 		// IF user is landing first time
 		if (TempDBUtil.isThisFirstTime(id)) {
-			respMessage = "Hey <a href='abc' onClick='sendMEssage()'>Ready</a><script>function sendMessage(){console.log('Hi');alert('hi')}</script>" + jsonObject1.get("name")
-					+ " May i help you";
-			
-			
-			TempDBUtil.storeIdentities(id, jsonObject1.get("name")
-					.toString());
-			//TempDBUtil.storeConversation(id,guestText);
-		}// If user has active session
-		else if (TempDBUtil.isActiveSession(id)) {			// Add a NLP hook here
-			
-			respMessage = "Would you be intrested for below?";//getBotMessage(jsonObject.get("text").toString());
-		}// User is returning
-		else {
-			respMessage = "Welcome back " + jsonObject1.get("name");
+			text = "Welcome";
+			TempDBUtil.storeIdentities(id, jsonObject1.get("name").toString());			
+			// TempDBUtil.storeConversation(id,guestText);
 		}
-
-		// TempDBUtil.configToken();
+		
+		//postMessage(text);
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 		con.setRequestMethod("POST");
@@ -100,54 +78,17 @@ public class HandleIncomingMessages extends HttpServlet {
 		String access_token = TempDBUtil.isTokenExpired() ? TempDBUtil
 				.getAuthToken() : TempDBUtil.TOKENMAP.get("token");
 		con.setRequestProperty("Authorization", "Bearer " + access_token);
-		// For POST only - START
-		con.setDoOutput(true);
-		// Send request
-		JSONObject obj2 = new JSONObject();
-		obj2.put("type", "message"+ "/" + "card.signin"); //message/card.carousel
-		obj2.put("text", respMessage);
-		
-		
-		//Attachment Layout starts here
-		obj2.put("attachmentLayout","list");
-		
-		//create array for "attachments"
-		JSONArray  attachArray = new JSONArray();
-		JSONObject attachObject1 = new JSONObject();
-		attachObject1.put("contentType","application/vnd.microsoft.card.hero");			
-		
-		
-		JSONObject contentVal = new JSONObject();
-		JSONArray list = new JSONArray();
-		JSONObject object = new JSONObject();
-		object.put("type", "I am Option1");
-		object.put("title", "HR");
-		object.put("value", "HR");
-		
-		JSONObject object1 = new JSONObject();
-		object1.put("type", "I am option 2");
-		object1.put("title", "Payroll");
-		object1.put("value", "Payroll");
-		
-		list.add(object);
-		list.add(object1);		
-		//obj2.put("buttons", list);
-		contentVal.put("text", "Choose any of the below");
-		contentVal.put("buttons", list);
-		
-		
-		attachObject1.put("content", contentVal);
-		attachArray.add(attachObject1);	
-		obj2.put("attachments", attachArray);
-
-		System.out.println("POST message is "+obj2.toJSONString());
+		con.setDoOutput(true);	
+		String outMessage = getAutomatedResponse(text);
+		System.out.println(outMessage);
 		DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-		wr.writeBytes(obj2.toString());
-		// System.out.println(obj2.toString());
+		wr.writeBytes(outMessage);
 		wr.flush();
 		wr.close();
-		// For POST only - END
+		
+				
 		int responseCode = con.getResponseCode();
+		
 		if (responseCode == HttpURLConnection.HTTP_OK || responseCode == 201) { // success
 			BufferedReader in = new BufferedReader(new InputStreamReader(
 					con.getInputStream()));
@@ -159,61 +100,32 @@ public class HandleIncomingMessages extends HttpServlet {
 			}
 			in.close();
 
-			// print result
-		} else {
-			System.out.println("POST request not worked "+responseCode);
+			
 		}
+		else{
+			System.out.println(responseCode+" Did not work");
+		}
+		
 	}
+	/**
+	 * Generate Automate response and hook to NLP
+	 * @param text
+	 * @return
+	 */
+	private String getAutomatedResponse(String text) {
 
-	private String getBotMessage(String reqMessage) {
-		String defString = "Lovely";
-		boolean isBrainOnComa = false;	
-		String url = "http://10.193.74.90:8983/solr/answer?q="+reqMessage;
-		System.out.println("Requeted URL:" + url);
-		StringBuilder sb = new StringBuilder();
-		URLConnection urlConn = null;
-		InputStreamReader in = null;
-		try {
-			URL reqUrl = new URL(url);
-			urlConn = reqUrl.openConnection();
-			if (urlConn != null)
-				urlConn.setReadTimeout(60 * 1000);
-			if (urlConn != null && urlConn.getInputStream() != null) {
-				in = new InputStreamReader(urlConn.getInputStream(),
-						Charset.defaultCharset());
-				BufferedReader bufferedReader = new BufferedReader(in);
-				if (bufferedReader != null) {
-					int cp;
-					while ((cp = bufferedReader.read()) != -1) {
-						sb.append((char) cp);
-					}
-					bufferedReader.close();
-				}
-			}
-		in.close();
-		} catch (Exception e) {
-			isBrainOnComa = true;
-			e.printStackTrace();			
-		} 
 		
-		String respMessage = isBrainOnComa? "I am sleeping, wait....": parseJSON(sb.toString());
+		if (text.equals("Welcome")) {
+			return ChatConstants.INITIALJSON;
+		}
 		
-		//System.out.println("Response is "+respMessage);
-		return respMessage;
+		if (text.equals("Wait, Let me find HR related topics for you")) {
+			return ChatConstants.HRJSON;
+		}
 		
+		return ChatConstants.GREETJSON;
+
 	}
 	
-	private String parseJSON(String jsonString){
-		
-		String respMessage = "Huh, I didn't understand, I need some more training";
-		try{
-			JSONObject jsonObject = (JSONObject) JSONValue.parse(jsonString);
-			JSONObject jsonObject1 = (JSONObject) jsonObject.get("from");
-		}catch(Exception ex){
-			ex.printStackTrace();
-		}
-		return respMessage;
-	}
-		
 	
 }
