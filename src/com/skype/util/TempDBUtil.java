@@ -27,6 +27,8 @@ public class TempDBUtil {
 	public static Map<String, String> TOKENMAP = new WeakHashMap<String, String>();
 	
 	private static Map<String,JSONObject> conversationMap = new HashMap<String,JSONObject>();
+	
+	private static String expiresDate ;
 
 	public static void storeIdentities(String id, String from) {
 		map.put(id, from);
@@ -49,6 +51,7 @@ public class TempDBUtil {
 		TOKENMAP.put(ChatConstants.TOKEN, token);
 		TOKENMAP.put(ChatConstants.EXPIRY, expiry);
 		TOKENMAP.put(ChatConstants.DATECREATED, dateCreated);
+		
 		System.out.println(TOKENMAP);
 	}
 
@@ -59,7 +62,7 @@ public class TempDBUtil {
 	 * @return
 	 */
 	private static String calculateExpiresDate(String expires) {
-		String expiresDate;
+		
 		Date dt = new Date();
 		SimpleDateFormat formatter = new SimpleDateFormat(
 				ChatConstants.DATEFORMAT_DD_MM_YYYY_HMMSS);
@@ -67,9 +70,8 @@ public class TempDBUtil {
 		Calendar c = Calendar.getInstance();
 		c.setTime(dt);
 		c.add(Calendar.SECOND, Integer.parseInt(expires));
-		expiresDate = formatter.format(c.getTime());
-
-		return expiresDate;
+		return formatter.format(c.getTime());
+	 
 	}
 
 	/**
@@ -78,23 +80,20 @@ public class TempDBUtil {
 	 * @return
 	 */
 	public static boolean isTokenExpired() {
-		SimpleDateFormat formatter = new SimpleDateFormat(
-				ChatConstants.DATEFORMAT_DD_MM_YYYY_HMMSS);
-		Date now = new Date();
-		Date expireDate;
-		try {
+					
 			if (TOKENMAP.get(ChatConstants.EXPIRY) == null)
 				return true;
-
-			expireDate = formatter.parse(calculateExpiresDate(TOKENMAP
-					.get(ChatConstants.EXPIRY)));
-			if (now.compareTo(expireDate) > 0) {
-				// Token expired
+			try{
+				SimpleDateFormat formatter = new SimpleDateFormat(
+						ChatConstants.DATEFORMAT_DD_MM_YYYY_HMMSS);
+			if (new Date().compareTo(formatter.parse(expiresDate)) > 0) {
+				System.out.println("*****Token has Expired********");
 				return true;
 			}
-		} catch (Exception ex) {
-
-		}
+			}catch(Exception ex){
+				ex.printStackTrace();
+			}
+		
 		return false;
 	}
 
@@ -141,6 +140,7 @@ public class TempDBUtil {
 			JSONObject jsonObject = (JSONObject) JSONValue.parse(sb.toString());
 			token = (String) jsonObject.get("access_token");
 			String expiry = jsonObject.get("expires_in").toString();
+			expiresDate =calculateExpiresDate(expiry);
 			// Set the token attribute in weekhashmap
 			setTokenMap(token, expiry);
 			conn.disconnect();
@@ -169,6 +169,10 @@ public class TempDBUtil {
 		JSONArray list =(JSONArray)convObj.get("messages");
 		list.add(fromString+":"+text);
 		
+	}
+	
+	public static void setApplicationURL(String url){
+		TOKENMAP.put(ChatConstants.APPLICATION_TEMP_URL, url);
 	}
 
 

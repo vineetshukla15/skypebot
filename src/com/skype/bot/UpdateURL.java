@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.skype.util.MessageFormatter;
+import com.skype.util.TempDBUtil;
 
 @WebServlet("/updateURL")
 public class UpdateURL extends HttpServlet {
@@ -17,7 +17,9 @@ public class UpdateURL extends HttpServlet {
     protected void doPost(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
     		String appURL = request.getParameter("url");
-    		MessageFormatter.setAppURL(appURL);
+    		System.out.println(appURL);
+    		TempDBUtil.setApplicationURL(appURL);
+    		
         // code to process the form...
     		// build HTML code
     		PrintWriter writer = response.getWriter();
