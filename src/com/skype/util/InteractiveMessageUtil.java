@@ -20,7 +20,7 @@ public class InteractiveMessageUtil {
 			"Concentrate and ask again", "Don't count on it", "My reply is no", "My sources say no",
 			"Outlook not so good", "Very doubtful" };
 
-	String[] magicGreets = { "Welcome", "Hey, Good to see you!", "It is my honor to serve you", "Hi, What's up dear","Hope you doing great, Welcome to AMA world" };
+	String[] magicGreets = { "Welcome", "Hey, Good to see you", "It is my honor to serve you", "Hi, What's up dear","Hope you doing great, Welcome to AMA world" };
 
 	
 	public InteractiveMessageUtil() {				

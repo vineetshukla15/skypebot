@@ -35,10 +35,22 @@ public class MessageFormatter {
 			return ChatConstants.JSONHR;
 		}
 		
-		return getJSONForNoAnswer();
-
+		if (text.equals("Yes, Show me from start")) {
+			return ChatConstants.JSON_DOMAINS;
+		}
+		
+		if (text.equals("Bye, Take Care!")) {
+			return "";
+		}
+		
+		return getJSONForReturning();
 	}
-       
+	
+	
+	private static String getJSONForReturning(){
+				return ChatConstants.JSON_REVISTING_IN_SAME_SESSION;
+	}
+	
 	
     public static String getJSONForNoAnswer(){
     	
