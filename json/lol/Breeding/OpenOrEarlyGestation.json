@@ -1,0 +1,17 @@
+{
+"type":"message/card.carousel",
+"summary":"Greetings from AMA",
+"text":"Hope you doing good","attachments": [{
+                       "contentType": "application/vnd.microsoft.card.hero",
+                       "content": {"title": "Which of these best describe your forage situation?","subtitle": "Tavant automated help desk", 
+						
+                        "buttons": [
+                          {
+                            "type": "imBack","title": "I have access to quality forage","value": "I have access to quality forage"
+                          },
+						  {
+                            "type": "imBack","title": "My horse cannot chew or digest hay","value": "My horse cannot chew or digest hay"
+                          }
+                        ]}
+                    }]
+	}

@@ -1,0 +1,17 @@
+{
+"type":"message/card.carousel",
+"summary":"Greetings from AMA",
+"text":"Hope you doing good","attachments": [{
+                       "contentType": "application/vnd.microsoft.card.hero",
+                       "content": {"title": "What stage of reproduction is your mare in?","subtitle": "Tavant automated help desk",
+						
+                        "buttons": [
+                          {
+                            "type": "imBack","title": "Open or Early Gestation","value": "Open or Early Gestation"
+                          },
+						  {
+                            "type": "imBack","title": "Lactation","value": "Lactation"
+                          }
+                        ]}
+                    }]
+	}

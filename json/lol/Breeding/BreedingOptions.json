@@ -1,0 +1,21 @@
+{
+"type":"message/card.carousel",
+"summary":"Greetings from AMA",
+"text":"Hope you doing good","attachments": [{
+                       "contentType": "application/vnd.microsoft.card.hero",
+                       "content": {"title": "Is your horse a broodmare or a stallion??","subtitle": "Tavant automated help desk", 
+						"images":[
+            				{
+                				"url":"https://8509c7fa.ngrok.io/SkypeBot/images/breeding/horsebreeding.jpg",
+                				"alt":"Horse Breeding"
+        				 }],
+                        "buttons": [
+                          {
+                            "type": "imBack","title": "Broodmare","value": "Broodmare"
+                          },
+						  {
+                            "type": "imBack","title": "Stallion","value": "Stallion"
+                          }
+                        ]}
+                    }]
+	}

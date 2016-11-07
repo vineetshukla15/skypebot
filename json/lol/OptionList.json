@@ -1,0 +1,22 @@
+{
+"type":"message/card.carousel",
+"summary":"Greetings from AMA",
+"text":"Hope you doing good","attachments": [{
+                       "contentType": "application/vnd.microsoft.card.hero",
+                       "content": {"title": "Find the Right Horse Feed?","subtitle": "Tavant automated help desk",                
+                        "buttons": [
+                          {
+                            "type": "imBack","title": "Breeding","value": "Breeding"
+                          },
+						  {
+                            "type": "imBack","title": "Growing","value": "Growing"
+                          },
+						  {
+                            "type": "imBack","title": "Senior","value": "Senior"
+                          },
+						  {
+                            "type": "imBack","title": "Performance","value": "Performance"
+                          }
+                        ]}
+                    }]
+	}
