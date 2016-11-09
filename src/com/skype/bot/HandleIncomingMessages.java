@@ -57,15 +57,20 @@ public class HandleIncomingMessages extends HttpServlet {
 		JSONObject jsonObject = (JSONObject) JSONValue.parse(jb.toString());
 		JSONObject jsonObject1 = (JSONObject) jsonObject.get("from");
 		String id = jsonObject1.get("id").toString();
-		System.out.println(jb.toString());
+		//System.out.println(jb.toString());
 		url = url + id + "/activities/";
 		String text = jsonObject.get("text").toString();
-		System.out.println(text);
+		//System.out.println(text);
 		// IF user is landing first time
 		if (TempDBUtil.isThisFirstTime(id)) {
 			text = "Greetings";
 			TempDBUtil.storeIdentities(id, jsonObject1.get("name").toString());
+			long startTime = System.currentTimeMillis();
 			postMessage(text);
+			long endTime = System.currentTimeMillis();
+			long sTime = endTime-startTime;
+			System.out.print("Time taken by servlet Request		: ");
+			System.out.println(sTime);
 			text = "Welcome";
 			// TempDBUtil.storeConversation(id,guestText);
 		}
@@ -79,20 +84,25 @@ public class HandleIncomingMessages extends HttpServlet {
 				.getAuthToken() : TempDBUtil.TOKENMAP.get("token");
 		String outMessage = MessageFormatter.getAutomatedResponse(text);
 		DataOutputStream wr = null;
+		HttpURLConnection con =null;
 		try {
-
+			long startTime = System.currentTimeMillis();
 			URL obj = new URL(url);
-			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+			con = (HttpURLConnection) obj.openConnection();
 			con.setRequestMethod("POST");
 			con.setRequestProperty("Content-Type", "application/json");
 			con.setRequestProperty("Authorization", "Bearer " + access_token);
 			con.setDoOutput(true);
 
 			wr = new DataOutputStream(con.getOutputStream());
-			System.out.println(outMessage);
+			//System.out.println(outMessage);
 			wr.writeBytes(outMessage);
 			wr.flush();
 			wr.close();
+			long endTime = System.currentTimeMillis();
+			long sTime = endTime-startTime;
+			System.out.println("Time taken by httpConnection : ");
+			System.out.println(sTime);
 			int responseCode = con.getResponseCode();
 			if (responseCode == HttpURLConnection.HTTP_OK
 					|| responseCode == 201) { // success
@@ -106,10 +116,14 @@ public class HandleIncomingMessages extends HttpServlet {
 				}
 				in.close();
 			} else {
-				System.out.println(responseCode + " Did not work");
+				//System.out.println(responseCode + " Did not work");
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
+		}
+		finally
+		{
+		 con.disconnect();
 		}
 	}
 

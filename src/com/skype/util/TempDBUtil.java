@@ -87,7 +87,7 @@ public class TempDBUtil {
 				SimpleDateFormat formatter = new SimpleDateFormat(
 						ChatConstants.DATEFORMAT_DD_MM_YYYY_HMMSS);
 			if (new Date().compareTo(formatter.parse(expiresDate)) > 0) {
-				System.out.println("*****Token has Expired********");
+				//System.out.println("*****Token has Expired********");
 				return true;
 			}
 			}catch(Exception ex){
@@ -134,7 +134,7 @@ public class TempDBUtil {
 			String output;
 			// System.out.println("Output from Server .... \n");
 			while ((output = br.readLine()) != null) {
-				System.out.println(output);
+				//System.out.println(output);
 				sb.append(output);
 			}
 			JSONObject jsonObject = (JSONObject) JSONValue.parse(sb.toString());

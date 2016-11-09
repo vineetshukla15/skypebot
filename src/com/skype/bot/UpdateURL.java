@@ -17,7 +17,7 @@ public class UpdateURL extends HttpServlet {
     protected void doPost(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
     		String appURL = request.getParameter("url");
-    		System.out.println(appURL);
+    		//System.out.println(appURL);
     		TempDBUtil.setApplicationURL(appURL);
     		
         // code to process the form...

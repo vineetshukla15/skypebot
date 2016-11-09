@@ -31,7 +31,7 @@ public class InteractiveMessageUtil {
 		List<String>  catalogue = Arrays.asList(magicAnswers);
 		int index = randomGenerator.nextInt(catalogue.size());
 		String item = catalogue.get(index);
-		System.out.println("Managers choice this week" + item + "our recommendation to you");
+		//System.out.println("Managers choice this week" + item + "our recommendation to you");
 		return item;
 	}
 	
@@ -39,7 +39,7 @@ public class InteractiveMessageUtil {
 		List<String> catalogue = Arrays.asList(magicGreets);
 		int index = randomGenerator.nextInt(catalogue.size());
 		String item = catalogue.get(index);
-		System.out.println("Managers choice this week" + item + "our recommendation to you");
+		//System.out.println("Managers choice this week" + item + "our recommendation to you");
 		return item;
 	}
 }
