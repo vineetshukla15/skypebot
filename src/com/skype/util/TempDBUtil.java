@@ -28,6 +28,8 @@ public class TempDBUtil {
 	
 	private static Map<String,JSONObject> conversationMap = new HashMap<String,JSONObject>();
 	
+	private static Map<String,String> jsonMap = new HashMap<String,String>();
+	
 	private static String expiresDate ;
 
 	public static void storeIdentities(String id, String from) {
@@ -40,7 +42,11 @@ public class TempDBUtil {
 	}
 
 	public static boolean isThisFirstTime(String id) {
-		return nameList.contains(id) ? false : true;
+		if(nameList.contains(id)) {
+			return false ;
+		}else{
+		 return true;
+		}
 
 	}
 
@@ -172,8 +178,11 @@ public class TempDBUtil {
 	}
 	
 	public static void setApplicationURL(String url){
-		TOKENMAP.put(ChatConstants.APPLICATION_TEMP_URL, url);
+		//TOKENMAP.put(ChatConstants.APPLICATION_TEMP_URL, url);
 	}
 
-
+	public static String CurrentContext(String context){
+		
+		return context;
+	}
 }

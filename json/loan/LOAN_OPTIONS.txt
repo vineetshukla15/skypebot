@@ -1,0 +1,80 @@
+{
+"type":"message/card.carousel",
+"summary":"Greetings from AMA",
+"text":"Hope you doing good","attachments": [{
+                       "contentType": "application/vnd.microsoft.card.hero",
+                       "content": {"title": "Let me know what you are looking for?","subtitle": "Tavant automated help desk",                
+                        "buttons": [
+                          {
+                            "type": "imBack","title": "Loan Purchase","value": "I am looking for Purchase"
+                          },
+						  {
+                            "type": "imBack","title": "Loan Refinance","value": "I am looking for Refinance"
+                          },
+						  {
+                            "type": "imBack","title": "Line of Credit","value": "Line of Credit"
+                          }
+                        ]}
+                    }]
+	}
+	
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
+	
+{"type":"message/card.carousel",
+"summary":"Greetings from AMA",
+"text":"Hope you doing good","attachments": [{
+                       "contentType": "application/vnd.microsoft.card.hero",
+                       "content": {"title": "Sure, Are you interested in?","subtitle": "Tavant automated help desk",                
+                        "buttons": [
+                          {
+                            "type": "imBack","title": "Fixed Rate Mortgage","value": "Fixed Rate Mortgage"
+                          },
+						  {
+                            "type": "imBack","title": "Adjustable Rate Mortgage","value": "Adjustable Rate Mortgage"
+                          },
+						  {
+                            "type": "imBack","title": "See All other Loan Products","value": "See All other Loan Products"
+                          }
+                        ]}
+                    }]
+	}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	{"type":"message/card.carousel",
+"summary":"Greetings from AMA",
+"text":"Hope you doing good","attachments": [{
+                       "contentType": "application/vnd.microsoft.card.hero",
+                       "content": {"title": "What would be the tern you are looking for?","subtitle": "Tavant automated help desk",                
+                        "buttons": [
+                          {
+                            "type": "imBack","title": "Less than 25 Years","value": "Less than 15 Years"
+                          },
+						  {
+                            "type": "imBack","title": "25-30","value": "25-35"
+                          },
+						  {
+                            "type": "imBack","title": "Above 35","value": "Above 35"
+                          }
+                        ]}
+                    }]
+	}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
+
+	{"type":"message/card.carousel",
+"summary":"Greetings from AMA",
+"text":"Hope you doing good","attachments": [{
+                       "contentType": "application/vnd.microsoft.card.hero",
+                       "content": {"title": "Would you like our Loan Officers to contact you??","subtitle": "Tavant automated help desk",                
+                        "buttons": [
+                          {
+                            "type": "imBack","title": "Yes","value": "Yes, Please contact me"
+                          },
+						  {
+                            "type": "imBack","title": "No","value": "Bye,Take Care!"
+                          },
+						  
+                        ]}
+                    }]
+	}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

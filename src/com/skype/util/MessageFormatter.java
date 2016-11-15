@@ -1,5 +1,8 @@
 package com.skype.util;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 
 public class MessageFormatter {
 	
@@ -11,7 +14,8 @@ public class MessageFormatter {
 	 * @return
 	 */
 	public static String getAutomatedResponse(String text) {
-
+		
+		boolean zipCodePending = false;
 		
 		if (text.equals("Welcome")) {
 			return ChatConstants.JSON_DOMAINS;
@@ -20,9 +24,7 @@ public class MessageFormatter {
 		if (text.equals("Greetings")) {
 			return getGreetingJSON();
 		}
-		
-		
-		
+					
 		if (text.equals("Manufacturing")) {
 			return ChatConstants.JSON_HERC_DEMO;
 		}
@@ -64,8 +66,54 @@ public class MessageFormatter {
 		if (text.equals("Yes, Show me from start")) {
 			return ChatConstants.JSON_DOMAINS;
 		}
+		/**
+		 * Mortgage Demo	
+		 */
 		
+		if(text.equals("BFSI")) {			
+			return ChatConstants.LOAN_OPTIONS;
+		}
 		
+		if(text.equals("I am looking for Loan Purchase")) {
+			return ChatConstants.LOAN_PURCHASE;
+		}
+		
+		if(text.equals("Fixed Rate Mortgage")) {
+			return ChatConstants.LOAN_PURCHASE_FIXEDRATE;
+		}
+		
+		if(text.equals("Less than 15 Years") || text.equals("15-30") || text.equals("More than 30")) {
+			return ChatConstants.CONTACT_CONFIRMATION;
+		}
+		
+		if(text.equals("Yes, Please contact me")) return ChatConstants.LOAN_CONTACT_SOON;
+		
+		if(text.equals("Loan Refinance")){
+			return ChatConstants.LOAN_REFINANCE;
+		}
+		
+		if(text.equals("I am looking for Loan Refinance")) return ChatConstants.LOAN_REFINANCE ;
+		
+		if(text.equals("Primary Residence")){
+			return ChatConstants.LOAN_REFINANCE_GOAL;
+		}
+		
+		if(text.equals("Lower my monthly payment")) {
+			return ChatConstants.CONTACT_APPROVAL_FEWDETAILS ; 
+		}
+				
+//		if(isZipCodeValid(text) && TempDBUtil.isThisFirstTime(id)){
+//			zipCodePending =false;
+//			return ChatConstants.CONTACT_APPROVAL_FEWDETAILS;
+//		}
+		
+		if(text.equals("Contact Approval")) return ChatConstants.CONTACT_APPROVAL_REFINANCE_FINAL;
+		
+		if(text.equals("Horse Breeding")) return ChatConstants.AGRI_HORSE;
+					
+		/**
+		 * 
+		 */
 		
 		if (text.equals("Bye, Take Care!")) {
 			return "";
@@ -97,8 +145,14 @@ public class MessageFormatter {
     	jsonGreet.append(new InteractiveMessageUtil().anyItemToGreet()+"\"}");
     	return jsonGreet.toString();
     }
-    
-    
-	
+   
+  
+	public static boolean isZipCodeValid(String zipCode) {
+		String regex = "^[0-9]{5}(?:-[0-9]{4})?$";
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher = pattern.matcher(zipCode);
+		return matcher.matches();
+
+	}
 
 }

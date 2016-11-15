@@ -1,0 +1,66 @@
+{
+"type":"message/card.carousel",
+"summary":"Greetings from AMA",
+"text":"Hope you doing good","attachments": [{
+                       "contentType": "application/vnd.microsoft.card.hero",
+                       "content": {"title": "Which type of property you are financing?","subtitle": "Tavant automated help desk",                
+                        "buttons": [
+                          {
+                            "type": "imBack","title": "Primary Residence","value": "Primary Residence"
+                          },
+						  {
+                            "type": "imBack","title": "Investment property","value": "Investment property"
+                          },
+						  {
+                            "type": "imBack","title": "Second home","value": "Second home"
+                          }
+                        ]}
+                    }]
+	}
+///////////////////////////////////////////
+	{
+"type":"message/card.carousel",
+"summary":"Greetings from AMA",
+"text":"Hope you doing good","attachments": [{
+                       "contentType": "application/vnd.microsoft.card.hero",
+                       "content": {"title": "What is your goal with refinance??","subtitle": "Tavant automated help desk",                
+                        "buttons": [
+                          {
+                            "type": "imBack","title": "Lower my monthly payment","value": "Lower my monthly payment"
+                          },
+						  {
+                            "type": "imBack","title": "Payoff mortgage faster","value": "Payoff mortgage faster"
+                          },
+						  {
+                            "type": "imBack","title": "Cash out of my home equity","value": "Cash out of my home equity"
+                          }
+                        ]}
+                    }]
+	}
+///////////////////////////////////////////////
+{
+"type": "message/text",
+"text": "Please enter valid zip code of your property"
+}
+////////////////////////////////////////////////////////
+{
+"type": "message/text",
+"text": "I would like to know few details about your refinance"
+}
+///////////////////////////////////////////////////////////////////////
+{"type":"message/card.carousel",
+"summary":"Greetings from AMA",
+"text":"Hope you doing good","attachments": [{
+                       "contentType": "application/vnd.microsoft.card.hero",
+                       "content": {"title": "Would you like our Loan Officers to contact you?","subtitle": "Tavant automated help desk",                
+                        "buttons": [
+                          {
+                            "type": "imBack","title": "Yes","value": "Yes, Please contact me"
+                          },
+						  {
+                            "type": "imBack","title": "No","value": "Bye,Take Care!"
+                          }
+						  
+                        ]}
+                    }]
+	};

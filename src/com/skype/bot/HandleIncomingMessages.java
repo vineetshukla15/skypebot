@@ -45,7 +45,7 @@ public class HandleIncomingMessages extends HttpServlet {
 		url = "https://apis.skype.com/v3/conversations/";
 		StringBuffer jb = new StringBuffer();
 		String line = null;
-
+		boolean skip = false;
 		try {
 			BufferedReader reader = request.getReader();
 			while ((line = reader.readLine()) != null)
@@ -57,7 +57,7 @@ public class HandleIncomingMessages extends HttpServlet {
 		JSONObject jsonObject = (JSONObject) JSONValue.parse(jb.toString());
 		JSONObject jsonObject1 = (JSONObject) jsonObject.get("from");
 		String id = jsonObject1.get("id").toString();
-		//System.out.println(jb.toString());
+		System.out.println(jb.toString());
 		url = url + id + "/activities/";
 		String text = jsonObject.get("text").toString();
 		//System.out.println(text);
@@ -68,13 +68,25 @@ public class HandleIncomingMessages extends HttpServlet {
 			long startTime = System.currentTimeMillis();
 			postMessage(text);
 			long endTime = System.currentTimeMillis();
-			long sTime = endTime-startTime;
+			long sTime = endTime - startTime;
 			System.out.print("Time taken by servlet Request		: ");
 			System.out.println(sTime);
 			text = "Welcome";
-			// TempDBUtil.storeConversation(id,guestText);
-		}
-		postMessage(text);
+			// TempDBUtil.storeConversation(jsonObject);
+		} else if (text.equals("Lower my monthly payment")) {
+			skip = true;
+			postMessage(text);
+			postMessage("Contact Approval");
+			
+		} else if (text.equals("Agriculture")) {
+			skip = true;
+			postMessage("Horse Breeding");
+			postMessage(text);
+			
+		} 
+		
+		if(!skip) postMessage(text);
+		
 
 	}
 
@@ -95,7 +107,7 @@ public class HandleIncomingMessages extends HttpServlet {
 			con.setDoOutput(true);
 
 			wr = new DataOutputStream(con.getOutputStream());
-			//System.out.println(outMessage);
+			System.out.println(outMessage);
 			wr.writeBytes(outMessage);
 			wr.flush();
 			wr.close();

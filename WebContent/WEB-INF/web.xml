@@ -18,19 +18,13 @@ id="WebApp_ID" version="3.0" metadata-complete="true">
   		<servlet-class>com.skype.bot.HandleIncomingMessages</servlet-class>
   </servlet>
   
-  <servlet>
-  		<servlet-name>UpdateURL</servlet-name>
-  		<servlet-class>com.skype.bot.UpdateURL</servlet-class>
-  </servlet>
+  
   <servlet-mapping>
   		<servlet-name>HandleIncomingMessages</servlet-name>
   		<url-pattern>/HandleIncomingMessages</url-pattern>
   </servlet-mapping>
   
-  <servlet-mapping>
-  		<servlet-name>UpdateURL</servlet-name>
-  		<url-pattern>/updateURL</url-pattern>
-  </servlet-mapping>
+  
   
   <!-- security-constraint>
     <web-resource-collection>

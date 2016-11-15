@@ -7,15 +7,15 @@
 						"images":[
             				{
                 				"url":"https://8509c7fa.ngrok.io/SkypeBot/images/lol/breeding/EnrichPlus.png",
-                				"alt":"Horse Breeding"
+                				"alt":"Enrich Plus® Ration Balancing Feed is Recommended for horses able to maintain body condition on hay and/or pasture alone. This concentrated feed provides the nutrition they need without excess calories."
         				 }],
                         "buttons": [
 							
 							{
-                            "type": "openUrl","title": "Check detailed recommended product info","value": "https://www.purinamills.com/horse-feed/products/amplify-high-fat-supplement"
+                            "type": "openUrl","title": "More About recommended Product ","value": "https://www.purinamills.com/horse-feed/products/enrich-plus-ration-balancing-feed"
 							},
                           {
-                            "type": "openUrl","title": "Check our recommended supplement product info","value": "https://www.purinamills.com/horse-feed/products/amplify-high-fat-supplement"
+                            "type": "openUrl","title": "We Also Recommend Supplement","value": "https://www.purinamills.com/horse-feed/products/amplify-high-fat-supplement"
                           },
 						  {
                             "type": "imBack","title": "Let's start once again","value": "Take me to Start"
